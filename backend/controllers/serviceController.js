@@ -20,8 +20,34 @@ create: async(req, res) => {
         console.log(error)
         
     }
+},
+
+getAll:async (req, res) => {
+try {
+    const Services = await serviceModel.find()
+     res.json(Services);
+    
+} catch (error) {
+    console.log(error)
+    
 }
 
+},
+
+get: async(req, res) =>{
+    
+    try {
+        const id = req.params.id;
+        const service = await serviceModel.findById(id);
+            if(!service){
+                res.status(404).json({ msg:"Serviço não encontrado" });
+                return;
+            }
+            res.json(service);
+    } catch (error) {
+        res.status(404).json({ msg:"Id Não Existe e muito longo" });  
+    }
+} 
 
 };
 
