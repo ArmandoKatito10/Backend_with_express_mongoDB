@@ -14,7 +14,7 @@ create: async(req, res) => {
         
         const response = await serviceModel.create(Service);
 
-         res.status(201).json({response, mes: "service criado com sucesesso!"});
+         res.status(201).json({response, msg: "service criado com sucesesso!"});
 
     } catch (error) {
         console.log(error)
@@ -35,7 +35,6 @@ try {
 },
 
 get: async(req, res) =>{
-    
     try {
         const id = req.params.id;
         const service = await serviceModel.findById(id);
@@ -47,7 +46,45 @@ get: async(req, res) =>{
     } catch (error) {
         res.status(404).json({ msg:"Id Não Existe e muito longo" });  
     }
-} 
+},
+ delete:async(req, res) => {
+    try {
+        const id = req.params.id;
+        const service = await serviceModel.findById(id);
+        if(!service){
+            res.status(404).json({ msg:"Serviço não encontrado" });
+            return;
+        }
+
+        const deledService = await serviceModel.findByIdAndDelete(id);
+        res.status(200).json({deledService, msg:"Serviço excluido com sucesso"});
+
+    } catch (error) {
+        res.status(404).json({msg:"digitou errado"})
+        
+    }
+ },
+ update: async(req, res) => {
+    try {
+        const id = req.params.id;
+        const Service ={
+            name:req.body.name,
+            description:req.body.description,
+            price:req.body.price,
+            image:req.body.image,
+        };
+        const updatedservice = await serviceModel.findByIdAndUpdate(id, Service);
+
+        if(!updatedservice){
+            res.status(404).json({ msg:"Serviço not found"});
+            return;
+        }
+    
+        res.status(200).json({Service, msg:"Actualizado com sucesso"})
+    } catch (error) {
+        res.status(404).json({ msg:"Servico não encontrado"}); 
+    }
+ }
 
 };
 
